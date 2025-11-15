@@ -102,15 +102,15 @@ It trains reliably on CPU while reaching AUC ≈ 0.93, which is very competitive
 ## 4. Evaluation Results
 - Graphs
 ### Confusion Matrix
-![Confusion Matrix](results/v1_confusion_matrix.png)
+<img src="results/v1_confusion_matrix.png" width="700">
 ### ROC Curve
-![ROC Curve](results/v1_roc_curve.png)
+<img src="results/v1_roc_curve.png" width="700">
 
 AUC ≈ 0.93, indicating strong separation between top-quark and QCD jets.
 This level of performance is typical of well-designed CNN-based jet taggers applied to single-channel calorimeter images.
 
 ### Score Distribution
-![Score Distribution](results/v1_score_distribution.png)
+<img src="results/v1_score_distribution.png" width="700">
 
 Signal and background form two well-separated peaks—evidence that the network learned meaningful substructure differences.
 
