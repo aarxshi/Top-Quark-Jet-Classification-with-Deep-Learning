@@ -135,7 +135,7 @@ quark_detection/
 │
 ├── scripts/
 |   ├── cnn.m
-│   ├── evaluate.m
+│   ├── evaluatem.m
 │   └── visualize_jets.m
 │
 └── README.md
