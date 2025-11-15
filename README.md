@@ -31,6 +31,7 @@ A preprocessed sample of 90k jets used in this project is available here:
 **Google Drive:**  
 https://drive.google.com/file/d/1ISTa0HIJZT8hH_Zf0tRVVoHQ5Ci1QJmK/view?usp=sharing
 
+
 To create the Parquet file yourself:
 
 ```python
@@ -95,19 +96,17 @@ Achieved 86.8% validation accuracy and AUC ≈ 0.93 using 90k training samples.
 
 The project includes visualization tools that helped me understand the physics behind the classification:
 
-- Single Jet Visualization
-A single jet image showing the sparse, tower-like energy pattern
+- Single Jet Visualization: A single jet image showing the sparse, tower-like energy pattern
 <p align="center">
 <img src="results/jet123.png" width="300">
 </p>
-- Average Signal vs Background
- Average jet images highlighting structural differences between top and QCD jets
+
+- Average Signal vs Background: Average jet images highlighting structural differences between top and QCD jets
 <p align="center">
 <img src="results/avg_quark.png" width="600">
 </p>
 
-- Side-by-Side Comparisons
-Direct comparison of individual signal and background jets.
+- Side-by-Side Comparisons: Direct comparison of individual signal and background jets.
 <p align="center">
 <img src="results/sig_vs_back.png" width="600">
 </p>
@@ -119,7 +118,9 @@ quark_detection/
 ├── data/
 │   ├── jets90000.parquet.gzip        # Refer to gdrive
 │   ├── cnn_v1_data.mat               # Train/val data
+|   ├── cnn_v1_split.mat              # Split info
 │   └── cnn_v1_eval.mat               # Evaluation outputs
+|   
 │
 ├── model/
 │   └── cnn_model.mat                 # Final trained CNN model
@@ -133,9 +134,8 @@ quark_detection/
 │   └── sig_vs_back.png
 │
 ├── scripts/
-│   ├── cnn_v1_data.m
-│   ├── cnn_v1_split.m
-│   ├── cnn_v1_eval.m
+|   ├── cnn.m
+│   ├── evaluate.m
 │   └── visualize_jets.m
 │
 └── README.md
