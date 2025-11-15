@@ -117,7 +117,7 @@ Direct comparison of individual signal and background jets.
 quark_detection/
 │
 ├── data/
-│   ├── jets90000.parquet.gzip        # Raw → processed dataset
+│   ├── jets90000.parquet.gzip        # Refer to gdrive
 │   ├── cnn_v1_data.mat               # Train/val data
 │   └── cnn_v1_eval.mat               # Evaluation outputs
 │
