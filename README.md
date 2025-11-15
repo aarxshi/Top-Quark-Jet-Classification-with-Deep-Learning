@@ -96,17 +96,17 @@ Achieved 86.8% validation accuracy and AUC ≈ 0.93 using 90k training samples.
 
 The project includes visualization tools that helped me understand the physics behind the classification:
 
-- Single Jet Visualization: A single jet image showing the sparse, tower-like energy pattern
+### Single Jet Visualization: A single jet image showing the sparse, tower-like energy pattern.
 <p align="center">
 <img src="results/jet123.png" width="300">
 </p>
 
-- Average Signal vs Background: Average jet images highlighting structural differences between top and QCD jets
+### Signal vs Background: Average jet images highlighting structural differences between top and QCD jets.
 <p align="center">
 <img src="results/avg_quark.png" width="600">
 </p>
 
-- Side-by-Side Comparisons: Direct comparison of individual signal and background jets.
+### Side-by-Side Comparisons: Direct comparison of individual signal and background jets.
 <p align="center">
 <img src="results/sig_vs_back.png" width="600">
 </p>
