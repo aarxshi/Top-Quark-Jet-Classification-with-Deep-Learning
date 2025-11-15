@@ -1,4 +1,4 @@
-# Lightweight Top-Quark Jet Classification with Deep Learning
+# Lightweight Top-Quark Classification with Deep Learning
 
 This project explores how deep learning can be used to identify hadronically decaying top quarks from low-level detector-like data. Using a compact jet-image representation and a lightweight CNN, the model learns to distinguish Top-Quark jets from QCD background jets, achieving:
 - Validation Accuracy: ~86.8%
