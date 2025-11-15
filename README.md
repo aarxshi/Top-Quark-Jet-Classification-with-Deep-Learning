@@ -1,77 +1,48 @@
 # Lightweight Top-Quark Jet Classification with Deep Learning
 
-This project explores how deep learning can be used to identify hadronically decaying top quarks from low-level detector-like data.
-Using a compact jet-image representation and a lightweight CNN, the model learns to distinguish Top-Quark jets from QCD background jets, achieving:
+This project explores how deep learning can be used to identify hadronically decaying top quarks from low-level detector-like data. Using a compact jet-image representation and a lightweight CNN, the model learns to distinguish Top-Quark jets from QCD background jets, achieving:
 - Validation Accuracy: ~86.8%
 - ROC AUC: ~0.93
 - CPU-friendly training (≤16 GB RAM)
 
-The project was developed as part of my exploration into collider physics and jet substructure, with an emphasis on clarity, reproducibility, and physical interpretability.
-
 ## 1. Physics Background
 
-In proton–proton collisions at high energy (e.g., at the LHC), the top quark decays almost instantly. When it decays hadronically, the decay chain: 
+In high-energy proton–proton collisions (e.g., at the LHC), a hadronically decaying top quark follows:
 
-```t → Wb → q q̄′ b```
+`t → Wb → q q̄′ b`
 
+The resulting three quarks appear as a **three-prong energy pattern** inside a single, boosted jet.  
+Standard QCD jets, by contrast, typically show only **one dominant core**.
 
-produces three quarks within a narrow angular region. After hadronisation, these quarks manifest as three localized energy branches inside a single jet.
-
-Why this matters:
-
-- The three-prong substructure is a key signature of boosted top quarks.
-
-- Standard QCD jets (from quarks/gluons) typically exhibit a single dominant core.
-
-The ability to tell these jets apart is crucial in many LHC analyses involving:
-
-- top-quark physics
-- new physics searches
-- boosted-object tagging pipelines
-- trigger-level event selection
-
-Why use jet images?
-
-Calorimeters at ATLAS/CMS record energy deposits in discrete towers.
-Projecting these towers into an η–ϕ grid forms a 2D “image”:
-
-- η (pseudorapidity) → vertical axis
-- ϕ (azimuth) → horizontal axis
-- Pixel intensity → energy from particles falling in that tower
-
-This project reshapes raw per-particle 4-momentum data into a 40×20 calorimeter-like image for each jet.
-
-Even though this representation is simplified, it still captures:
-
-- energy concentration
-- jet width
-- multi-prong patterns
-- local substructure
-
-These are precisely the features that CNNs excel at learning.
+These structural differences are important for analyses involving boosted-object tagging, new-physics searches, and trigger-level selections. To capture this substructure, raw particle 4-momentum is projected onto a **40×20 η–ϕ grid**, forming a calorimeter-like jet image. Even this simplified representation preserves energy concentration, jet width, and multi-prong patterns—features that CNNs learn effectively.
 
 ## 2. Dataset
 
-Each jet contains up to 200 particles, each described by their four-momentum components:
+This project uses the open jet dataset from CERN (Zenodo):  
+https://zenodo.org/records/2603256
 
-``` E, px, py, pz```
+Each jet has up to 200 particles, stored as four-momentum values:
 
-These 800 values are reshaped into a 40×20 grid, then normalized per jet.
+`E, px, py, pz`
 
-A separate Python snippet (optional) can be used to create a .parquet file:
-```
+(Zero-padded if fewer than 200 constituents.)
+
+A preprocessed sample of 90k jets used in this project is available here:
+**Google Drive:**  
+https://drive.google.com/file/d/1ISTa0HIJZT8hH_Zf0tRVVoHQ5Ci1QJmK/view?usp=sharing
+
+To create the Parquet file yourself:
+
+```python
 import pandas as pd
 
 df = pd.read_hdf("train.h5", "table").sample(n=90000)
 df.to_parquet("jets90000.parquet.gzip", compression="gzip")
 ```
-MATLAB scripts convert this into jet images and create train/validation splits.
-
 ## 3. CNN Architecture
 
 A compact CNN was chosen to balance physics performance with computational constraints (CPU-only training).
 
-Architecture 
 ```
 ┌──────────────────────┐      ┌────────────────────────┐     ┌──────────────────────┐
 │    Data Pipeline     │────▶ │   Jet Image Builder    │────▶│    CNN Classifier   │
@@ -90,61 +61,56 @@ Architecture
       │ • Comparisons  │      │ • Score Distribution   │
       └────────────────┘      └────────────────────────┘
 ```
-Why this architecture?
-
-It is small enough to avoid overfitting given simple jet images.
-It retains multi-scale feature extraction, suitable for:
-- jet width
-- local energy clusters
-- three-prong vs one-prong structure
-It trains reliably on CPU while reaching AUC ≈ 0.93, which is very competitive for single-channel jet images.
+Key hyperparameters:
+  
+| **HYPERPARAMETER**      | **VALUE** | **DESCRIPTION**                                  |
+|-------------------------|-----------|--------------------------------------------------|
+| Initial Learn Rate      | 5e-3      | Reduces risk of overshooting the optimum         |
+| Learn Rate Schedule     | Piecewise | Simple and stable decay strategy                 |
+| Learn Rate Decay        | 0.3       | Multiplies LR by 0.3 at each drop step           |
+| Learn Rate Drop Period  | 4 epochs  | Decays LR every 4 epochs                         |
+| L2 Regularization       | 1e-4      | Light penalty to control overfitting             |
+| Batch Size              | 64        | Balanced between training speed and RAM use      |
+| Max Epochs              | 12        | Model begins to overfit past ~14 epochs          |
+| Optimizer               | Adam      | Stable and adaptive for small CNNs               |
 
 ## 4. Evaluation Results
-- Graphs
+Achieved 86.8% validation accuracy and AUC ≈ 0.93 using 90k training samples.
 ### Confusion Matrix
+<p align="center">
 <img src="results/v1_confusion_matrix.png" width="700">
-### ROC Curve
-<img src="results/v1_roc_curve.png" width="700">
+</p>
 
-AUC ≈ 0.93, indicating strong separation between top-quark and QCD jets.
-This level of performance is typical of well-designed CNN-based jet taggers applied to single-channel calorimeter images.
+### ROC Curve
+<p align="center">
+<img src="results/v1_roc_curve.png" width="700">
+</p>
 
 ### Score Distribution
+<p align="center">
 <img src="results/v1_score_distribution.png" width="700">
-
-Signal and background form two well-separated peaks—evidence that the network learned meaningful substructure differences.
+</p>
 
 ## 5. Jet Image Visualizations
 
-The project includes visualization tools that helped me understand the physics behind the classification.
+The project includes visualization tools that helped me understand the physics behind the classification:
 
 - Single Jet Visualization
-Shows the sparse, tower-like nature of jet images.
-
-```visualize_jets("single", 120);```
-
+A single jet image showing the sparse, tower-like energy pattern
+<p align="center">
 <img src="results/jet123.png" width="300">
-
+</p>
 - Average Signal vs Background
-  
-These plots visualize the “typical” top jet compared to a typical QCD jet.
-
-```visualize_jets("average");```
-
+ Average jet images highlighting structural differences between top and QCD jets
+<p align="center">
 <img src="results/avg_quark.png" width="600">
-
+</p>
 
 - Side-by-Side Comparisons
-  
-```visualize_jets("compare", 5);```
-
+Direct comparison of individual signal and background jets.
+<p align="center">
 <img src="results/sig_vs_back.png" width="600">
-
-Even in simple grayscale images, subtle structural differences appear:
-- Top jets are broader and more distributed.
-- QCD jets tend to be more sharply centered.
-
-These qualitative patterns match expectations from jet-substructure physics.
+</p>
 
 # 6. Folder Structure
 ```
@@ -189,24 +155,3 @@ quark_detection/
 
 - Step 4 — Visualize jets  
 ```visualize_jets("single", 50);```
-
-## 8. Summary and Outlook
-
-This project demonstrates that:
-- Even simple jet images contain enough information to identify boosted top quarks.
-- A compact CNN can reach AUC ≈ 0.93 without large architectures or engineered physics features.
-
-Lightweight approaches remain relevant for:
-
-- CPU-only environments
-- educational and research prototypes
-- rapid benchmarking
-- trigger-level feasibility studies
-
-Further extensions could include:
-
-- multi-channel jet images (pT, eta, phi, energy)
-- physics-derived features such as n-subjettiness
-- residual or attention-based architectures
-- saliency maps for interpretability
-- comparison against more modern taggers (e.g., ParticleNet)
