@@ -112,7 +112,7 @@ Direct comparison of individual signal and background jets.
 <img src="results/sig_vs_back.png" width="600">
 </p>
 
-# 6. Folder Structure
+## 6. Folder Structure
 ```
 quark_detection/
 │
