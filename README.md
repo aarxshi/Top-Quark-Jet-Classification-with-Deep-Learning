@@ -155,3 +155,8 @@ quark_detection/
 
 - Step 4 — Visualize jets  
 ```visualize_jets("single", 50);```
+
+## 8. Conclusion
+This project demonstrates that meaningful jet substructure discrimination can be achieved using a lightweight deep learning approach that is accessible beyond large computing clusters. By operating on compact jet-image representations and a small convolutional neural network, the model achieves strong signal–background separation while remaining feasible to train on a standard laptop with modest memory requirements.
+
+In addition to classification performance, the accompanying visualizations highlight the physically interpretable features learned by the network, such as the characteristic multi-prong structure of hadronically decaying top-quark jets. This combination of computational efficiency, interpretability, and competitive performance makes the approach suitable for exploratory studies, education, and rapid prototyping in high-energy physics analyses.
