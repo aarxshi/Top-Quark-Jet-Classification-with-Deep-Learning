@@ -1,14 +1,29 @@
 clc; clear;
 
-%load old data
-load("cnn_v1_eval.mat", "Ypred", "scores", "acc", "confMat");
+% files
+evalFile = "cnn_v1_eval.mat";
+dataFile = "cnn_v1_data.mat";
 
-% load Yval from the data file
-if isfile("cnn_v1_data.mat")
-    load("cnn_v1_data.mat", "Yval");
-    disp("Loaded Yval from cnn_v1_data.mat.");
+% load evaluation data
+data = load(evalFile);
+
+Ypred = data.Ypred;
+scores = data.scores;
+acc = data.acc;
+confMat = data.confMat;
+
+% check if training info exists
+infoExists = isfield(data, "info");
+if infoExists
+    info = data.info;
+end
+
+% load validation labels
+if isfile(dataFile)
+    load(dataFile, "Yval");
+    disp("Loaded Yval from data file.");
 else
-    error("cnn_v1_data.mat not found. Cannot plot evaluation graphs.");
+    error("Data file not found. Cannot plot evaluation graphs.");
 end
 
 %1. Training accuracy and loss
