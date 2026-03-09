@@ -72,7 +72,7 @@ Key hyperparameters:
 | Learn Rate Drop Period  | 4 epochs  | Decays LR every 4 epochs                         |
 | L2 Regularization       | 1e-4      | Light penalty to control overfitting             |
 | Batch Size              | 64        | Balanced between training speed and RAM use      |
-| Max Epochs              | 12        | Model begins to overfit past ~14 epochs          |
+| Max Epochs              | 8         | Model begins to overfit past ~14 epochs          |
 | Optimizer               | Adam      | Stable and adaptive for small CNNs               |
 
 ## 4. Evaluation Results
