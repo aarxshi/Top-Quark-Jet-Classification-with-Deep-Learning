@@ -24,6 +24,8 @@ tData = tall(ds);
 
 % gather into memory after tall operations are done
 disp("Gathering data from datastore...");
+% gather into memory for this dataset size (90k samples);
+% pipeline uses parquetDatastore + tall arrays to support scaling to larger datasets
 df = gather(tData);
 disp("Loaded " + height(df) + " samples.");
 
