@@ -42,7 +42,7 @@ df.to_parquet("data/jets90000.parquet.gzip", compression="gzip")
 
 ## 3. CNN Architecture
 
-A compact CNN was chosen to balance physics performance with computational constraints (CPU-only training). Data is loaded using MATLAB's `parquetDatastore` and preprocessed via `tall` arrays before training, enabling scalable handling of large datasets without loading everything into memory at once.
+A compact CNN was chosen to balance physics performance with computational constraints (CPU-only training). Data is loaded using MATLAB's `parquetDatastore` and preprocessed via `tall` arrays before training, using MATLAB’s parquetDatastore and tall arrays to establish a scalable data pipeline, with in-memory processing used here for the 90k sample subset.
 
 ```
 ┌──────────────────────┐      ┌────────────────────────┐     ┌──────────────────────┐
